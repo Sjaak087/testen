@@ -1,0 +1,67 @@
+BELANGRIJK VOOR DE VRIENDENFUNCTIE EN DE CHAT
+
+1. Gebruik de bestanden uit deze ZIP.
+2. Zet in Firebase Authentication > Sign-in method > Anonymous / Anoniem aan.
+3. Zet in Firebase Realtime Database > Rules de VOLLEDIGE inhoud van firebase-rules.json en klik op Publiceren.
+4. Herlaad de website daarna.
+
+
+WAT IS ER NIEUW IN DE CHAT
+- De chat met een vriend is nu beeldvullend (het hele scherm).
+- Met de knop 🎨 bovenin kies je een achtergrond (13 keuzes) en de kleur van de tekstvakjes: apart voor je eigen berichten
+  en voor de berichten van je vriend (12 kleuren + eigen kleur). De tekst in het vakje wordt vanzelf licht of donker,
+  zodat je hem altijd kunt lezen. Dit wordt per chat onthouden in je eigen browser. Je vriend ziet jouw instellingen niet.
+- Berichten verwijderen: bij je eigen berichten staat een 🗑. Een cadeau dat nog niet is geaccepteerd trek je zo ook in.
+  Je kunt alleen je eigen berichten verwijderen.
+- Naast het schrijfvak staat een knopje met je poppetje en een plusje. Klik erop, kies een dier of accessoire
+  uit je eigen verzameling en klik op "Verzenden". Het poppetje staat dan als cadeaukaart in de chat.
+- De ander kan het Accepteren of Weigeren. Pas bij accepteren heeft de verzender er een minder en de ontvanger er een erbij.
+  De verzender kan het cadeau terugtrekken zolang het nog niet is geaccepteerd.
+- Je kunt niet meer aanbieden dan je hebt, en je laatste dier of accessoire kun je niet versturen.
+- Een chatbericht met een poppetje heeft in Firebase: type "poppetje", soort ("dier" of "accessoire"), item, aan (uid ontvanger)
+  en status ("open", "bezig", "geaccepteerd", "geweigerd" of "mislukt").
+
+- Nieuwe berichten: bij de knop "💬 Chat" van een vriend staat een cijfertje met het aantal berichten dat je nog niet hebt gelezen
+  (1 bij een bericht, 2 bij twee, enzovoort). Vrienden met nieuwe berichten staan bovenaan de lijst. Het cijfertje bij de knop
+  "Vrienden" rechtsboven telt de nieuwe berichten en de vriendschapsverzoeken samen. Zodra je de chat opent, verdwijnt het cijfertje.
+  Wat je gelezen hebt wordt onthouden in je eigen browser, dus op een ander apparaat telt het opnieuw.
+- Quiz sturen: naast het schrijfvak staat een knopje 📝 met een plusje. Kies een van je quizzen en klik op "Sturen".
+  In de chat verschijnt een kaartje. De ander kan Accepteren of Weigeren. Bij accepteren staat de quiz ook bij zijn "Mijn quizzen"
+  (met "Gedeeld door <naam>") en kan hij hem aanpassen, spelen en hosten.
+  Het is dezelfde quiz (dezelfde code): aanpassingen zie je allebei, en jij houdt hem ook zelf.
+  Haalt de ander hem uit zijn lijst ("Uit mijn lijst"), dan verdwijnt hij alleen bij hem. Verwijdert de maker de quiz,
+  dan verdwijnt hij bij beiden. Wie de quiz heeft geaccepteerd op een ander apparaat, kan hem via het kaartje in de chat
+  opnieuw toevoegen. Een quiz die je stuurt kun je terugtrekken zolang hij niet is geaccepteerd.
+  Chatberichten met een quiz hebben in Firebase: type "quiz", code, titel, aantalVragen, aan en status (net als bij poppetjes).
+
+POPPETJE WIJZIGEN
+- Klik rechtsboven op je poppetje > "Poppetje wijzigen". Er opent een beeldvullend scherm met bovenin een groot voorbeeld
+  en wat je nu aanhebt (tik op een label om het weg te halen). Daaronder staan tabbladen: Dieren, Hoeden, Brillen en Extra.
+  Tik op een kaartje om te kiezen; het gekozen kaartje heeft een vinkje. Bij accessoires kies je "Geen" om het weg te halen.
+  Je ziet er ook bij hoeveel je er hebt van het totaal. Alles wordt meteen opgeslagen.
+
+GEBRUIKERSNAAM WIJZIGEN EN VRIENDEN ZOEKEN
+- Klik rechtsboven op je poppetje > "Gebruikersnaam wijzigen". Is de nieuwe naam nog vrij, dan wordt hij meteen je naam.
+  Je oude naam komt weer vrij voor anderen. De nieuwe naam verschijnt ook in de vriendenlijst van je vrienden en bij je eigen quizzen.
+  Twee mensen kunnen nooit dezelfde naam hebben (hoofdletters maken geen verschil).
+- Vrienden zoeken werkt nu zoals quizzen zoeken: je ziet de resultaten terwijl je typt, hoofdletters maken niet uit
+  en je hoeft niet het begin van de naam te typen (een stukje van de naam is genoeg).
+- Heeft iemand jou al een verzoek gestuurd, dan staat er bij die persoon "Accepteren". Heb je zelf al een verzoek gestuurd, dan staat er "Verzoek gestuurd".
+
+
+WAAROM DE REGELS ZIJN AANGEPAST
+- Vriendschapsverzoeken: de ontvanger moet het verzoek kunnen verwijderen zodra het wordt geaccepteerd.
+  De vorige regel liet alleen de afzender schrijven naar het verzoek, waardoor accepteren kon mislukken.
+- Chats: alleen de twee deelnemers kunnen berichten lezen en schrijven. Bij een bestaand bericht mag alleen het veld "status" veranderen
+  (dat is nodig om een poppetje te accepteren of te weigeren). Je mag je eigen bericht verwijderen, behalve tijdens het accepteren van een poppetje.
+- Poppetjes versturen: bij accepteren schrijft de ontvanger ook naar het aantal poppetjes van de verzender (gebruikers/<uid>/bezit),
+  daarom mag elke ingelogde gebruiker naar losse items onder bezit/dieren en bezit/accessoires schrijven (alleen getallen van 0 of hoger).
+- Gebruikersnaam wijzigen: je mag je eigen naam vrijgeven (verwijderen) uit "gebruikersnamen", en je mag je eigen naam
+  bijwerken in de vriendenlijst van je vrienden. De afzender van een vriendschapsverzoek mag dat verzoek ook lezen (voor "Verzoek gestuurd").
+- gebruikers, gebruikersnamen, vrienden en vriendschapsverzoeken staan ook in firebase-rules.json.
+  Zonder die regels kan het zoeken en toevoegen van vrienden niet werken.
+
+
+KISTEN HERSTELD
+De meegeleverde firebase-rules.json bevat ook weer de oorspronkelijke regels voor quizzen, sessies, mysterieboxen,
+geluksrad en aangepastePoppetjes. Publiceer deze volledige regels in Firebase.

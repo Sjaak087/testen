@@ -1,10 +1,8 @@
-// ---------- Sitebeheer (echt inloggen via Firebase Authentication) ----------
+// ---------- Sitebeheer (altijd actief, zonder login) ----------
 //
-// De beheerder logt in met een e-mailadres + wachtwoord dat in de Firebase
-// Console staat (Authentication -> Users), niet in deze broncode. Zie de
-// readme voor hoe je dat account daar aanmaakt. Firebase onthoudt het
-// ingelogd zijn automatisch, dus na een herlaadbeurt blijft de beheerder
-// ingelogd tot er bewust wordt uitgelogd.
+// Sitebeheer hoeft niet meer via Firebase Authentication in te loggen.
+// Firebase Authentication blijft hieronder wel beschikbaar voor anonieme
+// spelers en de vrienden/chat-functie.
 
 let sitebeheerActief = true;
 
@@ -39,91 +37,22 @@ function socialeVerbindingsMelding() {
   return 'Je bent nog niet verbonden met vrienden en chat' + (socialeAuthFout ? ' (' + socialeAuthFout + ')' : '') + '. Controleer je internet en probeer het zo nog eens.';
 }
 
-const sitebeheerOverlayEl = document.getElementById('sitebeheer-overlay');
-const inputSitebeheerEmailEl = document.getElementById('input-sitebeheer-email');
-const inputSitebeheerWachtwoordEl = document.getElementById('input-sitebeheer-wachtwoord');
-const sitebeheerFoutmeldingEl = document.getElementById('sitebeheer-foutmelding');
 const btnSitebeheerEl = document.getElementById('btn-sitebeheer');
-const btnSitebeheerBevestigenEl = document.getElementById('btn-sitebeheer-bevestigen');
-
-function openSitebeheerOverlay() {
-  sitebeheerFoutmeldingEl.textContent = '';
-  inputSitebeheerEmailEl.value = '';
-  inputSitebeheerWachtwoordEl.value = '';
-  sitebeheerOverlayEl.classList.add('actief');
-  inputSitebeheerEmailEl.focus();
-}
-
-function sluitSitebeheerOverlay() {
-  sitebeheerOverlayEl.classList.remove('actief');
-}
 
 function werkSitebeheerKnopBij() {
-  if (sitebeheerActief) {
-    btnSitebeheerEl.classList.add('actief');
-    btnSitebeheerEl.textContent = '🔓 Sitebeheer actief';
-  } else {
-    btnSitebeheerEl.classList.remove('actief');
-    btnSitebeheerEl.textContent = '⚙ Sitebeheer';
-  }
+  if (!btnSitebeheerEl) return;
+  btnSitebeheerEl.classList.add('actief');
+  btnSitebeheerEl.textContent = '🔓 Sitebeheer actief';
 }
 
-btnSitebeheerEl.addEventListener('click', () => {
-  if (sitebeheerActief) {
-    // Al ingelogd: nogmaals klikken logt meteen uit.
-    auth.signOut();
-    return;
-  }
-  openSitebeheerOverlay();
-});
+// Geen loginvenster en geen uitloggen: sitebeheer is altijd beschikbaar.
+werkSitebeheerKnopBij();
 
-document.getElementById('btn-sitebeheer-annuleren').addEventListener('click', () => {
-  sluitSitebeheerOverlay();
-});
-
-function probeerSitebeheerInloggen() {
-  const email = inputSitebeheerEmailEl.value.trim();
-  const wachtwoord = inputSitebeheerWachtwoordEl.value;
-
-  if (!email || !wachtwoord) {
-    sitebeheerFoutmeldingEl.textContent = 'Vul e-mailadres en wachtwoord in.';
-    return;
-  }
-
-  sitebeheerFoutmeldingEl.textContent = '';
-  btnSitebeheerBevestigenEl.disabled = true;
-  btnSitebeheerBevestigenEl.textContent = 'Bezig...';
-
-  auth.signInWithEmailAndPassword(email, wachtwoord)
-    .then(() => {
-      // sitebeheerActief wordt automatisch gezet via onAuthStateChanged hieronder.
-      sluitSitebeheerOverlay();
-    })
-    .catch(() => {
-      sitebeheerFoutmeldingEl.textContent = 'Inloggen mislukt: onjuist e-mailadres of wachtwoord.';
-    })
-    .finally(() => {
-      btnSitebeheerBevestigenEl.disabled = false;
-      btnSitebeheerBevestigenEl.textContent = 'Inloggen';
-    });
-}
-
-btnSitebeheerBevestigenEl.addEventListener('click', probeerSitebeheerInloggen);
-
-[inputSitebeheerEmailEl, inputSitebeheerWachtwoordEl].forEach(veld => {
-  veld.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      probeerSitebeheerInloggen();
-    }
-  });
-});
-
+// Blijf sitebeheer actief wanneer de anonieme Firebase-gebruiker verandert.
 auth.onAuthStateChanged(gebruiker => {
-  sitebeheerActief = !!gebruiker && !gebruiker.isAnonymous;
+  sitebeheerActief = true;
   werkSitebeheerKnopBij();
-  if (gebruiker && !gebruiker.isAnonymous) {
-    // Beheerder-account: niets extra's nodig.
-  } else if (!gebruiker) {
+  if (!gebruiker) {
     zorgVoorSocialeGebruiker();
   }
   if (typeof laadSocialeGegevens === 'function') laadSocialeGegevens();

@@ -1,5 +1,7 @@
 BELANGRIJK VOOR DE VRIENDENFUNCTIE EN DE CHAT
 
+SITEBEHEER IS ALTIJD ACTIEF EN HEEFT GEEN LOGIN MEER.
+
 1. Gebruik de bestanden uit deze ZIP.
 2. Zet in Firebase Authentication > Sign-in method > Anonymous / Anoniem aan.
 3. Zet in Firebase Realtime Database > Rules de VOLLEDIGE inhoud van firebase-rules.json en klik op Publiceren.

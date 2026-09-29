@@ -26,12 +26,11 @@ Alles hieronder doe je één keer in de Firebase Console (https://console.fireba
 3. Project instellingen (tandwiel) → Algemeen → Jouw apps → Web-app (</>) → registreer een app.
 4. Kopieer de firebaseConfig naar firebase-config.js. Let op dat databaseURL erin staat.
 
-1C. Aanmelden (Authentication) — hier gaat het het vaakst mis
+1C. Aanmelden (alleen voor vrienden/chat)
 5. Build → Authentication → Aan de slag.
-6. Tabblad "Sign-in method" → zet **Anoniem** aan → Opslaan. Gewone spelers krijgen hiermee een eigen onzichtbaar account. ZONDER DIT WERKEN VRIENDEN EN CHAT ALLEEN VOOR SITEBEHEER.
-7. Zet op dezelfde plek **E-mail/Wachtwoord** aan (voor het sitebeheer-account).
-8. Tabblad "Users" → Add user → maak het beheerdersaccount (e-mail + wachtwoord voor het Sitebeheer-knopje). Het staat alleen in Firebase, nergens in de code.
-9. Tabblad "Instellingen" → "Geautoriseerde domeinen": zorg dat het domein van je site erin staat, bijv. jouwnaam.github.io (localhost staat er standaard al in). Staat je domein er niet in, dan mislukt aanmelden op je echte site.
+6. Tabblad "Sign-in method" → zet **Anoniem** aan → Opslaan. Gewone spelers krijgen hiermee een eigen onzichtbaar account voor vrienden en chat.
+7. Tabblad "Instellingen" → "Geautoriseerde domeinen": zorg dat het domein van je site erin staat, bijv. jouwnaam.github.io (localhost staat er standaard al in).
+8. **Sitebeheer gebruikt geen login meer** en is direct actief voor iedere bezoeker.
 
 1D. Regels publiceren
 10. Realtime Database → tabblad "Regels".
@@ -210,23 +209,19 @@ Bij het maken (of bewerken) van een quiz kun je een vinkje "Deze quiz openbaar m
 
 Tip voor betere prestaties bij veel quizzen: de complete regels bij Stap 1 hierboven bevatten al een index op het openbaar-veld (".indexOn": ["openbaar"]). Zonder die index werkt alles ook gewoon, Firebase geeft dan alleen een waarschuwing in de console bij grotere datasets.
 
-Sitebeheer (nieuw, met echt account via Firebase Authentication)
+Sitebeheer (zonder login)
 
-Onderaan elk scherm staat een klein knopje "Sitebeheer". Daar klik je op, log je in met het e-mailadres + wachtwoord van het beheerdersaccount (zie Stap 1 hierboven), en kom je terug op dezelfde pagina — alleen kun je nu bij "Speelbare quizzen" per quiz op "Aanpassen" of "Verwijderen" klikken:
+Onderaan elk scherm staat een klein knopje "Sitebeheer". Sitebeheer is altijd actief; er is geen e-mailadres, wachtwoord of loginvenster meer nodig. Daardoor zijn de beheertools direct beschikbaar voor iedere bezoeker:
 
 Aanpassen: opent hetzelfde bewerkformulier als bij "Mijn quizzen", zodat sitebeheer de titel, vragen, antwoorden en omslagfoto van elke openbare quiz kan wijzigen — ook van quizzen die door iemand anders zijn gemaakt. Na opslaan (of op "Terug" klikken) kom je weer terug bij "Speelbare quizzen".
 
 Verwijderen: haalt de quiz uit die lijst (hij wordt "niet-openbaar" gezet); de quiz zelf blijft gewoon bestaan voor de maker.
 
-Namen zichtbaar: alleen als je bent ingelogd zie je bij elke quiz "Door <naam>" (of "naam onbekend"). Uitgelogd zie je nergens namen.
+Namen zichtbaar: omdat sitebeheer altijd actief is, kunnen alle bezoekers bij elke quiz "Door <naam>" (of "naam onbekend") zien.
 
-Alle quizmakers: zolang je bent ingelogd staat bovenaan "Speelbare quizzen" een inklapbaar venster (klik op de titel om in of uit te klappen) met een overzicht van álle makers, ook van quizzen die niet openbaar zijn of zijn weggehaald. Per maker zie je de quizzen, codes en status. Quizzen zonder naam staan onder "Naam onbekend".
+Alle quizmakers: bovenaan "Speelbare quizzen" staat het inklapbare venster met een overzicht van álle makers, ook van quizzen die niet openbaar zijn of zijn weggehaald. Per maker zie je de quizzen, codes en status. Quizzen zonder naam staan onder "Naam onbekend".
 
-Nogmaals op "Sitebeheer" klikken logt je weer uit.
-
-Dit inloggen verloopt via Firebase Authentication, niet via een wachtwoord in de broncode: de inloggegevens staan alleen in de Firebase Console, dus niemand kan ze terugvinden door in de bestanden van de site te kijken. Firebase onthoudt bovendien dat je bent ingelogd, dus na het herladen van de pagina blijf je ingelogd totdat je bewust uitlogt. Wil je meerdere mensen sitebeheerder maken? Voeg dan in Firebase Console → Authentication → Users gewoon nog een gebruiker toe.
-
-Let op: dit account beschermt alleen de knop in de website zelf. De Firebase-regels hieronder staan nog steeds iedereen toe om in quizzen en sessies te lezen en schrijven (dat is nodig omdat gewone bezoekers zonder account al hun eigen quizzen kunnen maken/spelen). Wil je dat ook op databaseniveau afschermen, dan is dat een grotere aanpassing van de regels — laat het weten als je dat ook wil.
+Let op: sitebeheer is nu bewust niet afgeschermd. De Firebase-regels hieronder staan voor meerdere beheerpaden eveneens schrijven toe aan iedere bezoeker, dus iedereen kan de bijbehorende beheeracties uitvoeren.
 
 Zodra een quiz zo wordt weggehaald, ziet de maker (op zijn/haar eigen apparaat, onder "Mijn quizzen") bovenaan die quiz een rode melding: "Uw quiz is weggehaald bij openbaar." Met de knop "OK" bij die melding gaat hij weer weg.
 

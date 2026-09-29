@@ -48,6 +48,15 @@ function werkSitebeheerKnopBij() {
 // Geen loginvenster en geen uitloggen: sitebeheer is altijd beschikbaar.
 werkSitebeheerKnopBij();
 
+// Klik op Sitebeheer opent direct het beheerscherm. Er is geen login meer nodig.
+if (btnSitebeheerEl) {
+  btnSitebeheerEl.addEventListener('click', () => {
+    toonScherm('scherm-speelbare-quizzen');
+    laadOpenbareQuizzen();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
 // Blijf sitebeheer actief wanneer de anonieme Firebase-gebruiker verandert.
 auth.onAuthStateChanged(gebruiker => {
   sitebeheerActief = true;
